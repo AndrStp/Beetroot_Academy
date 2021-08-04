@@ -13,4 +13,4 @@ def calculate_price(stock_: dict, prices_: dict) -> float:
     return round(total_price, 2)
 
 total = calculate_price(stock, prices)
-print(f'The total price of the stock is ${total}')
+print(f'The total price of the stock is ${total:.2f}')
