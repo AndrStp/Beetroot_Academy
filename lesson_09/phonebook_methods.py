@@ -14,7 +14,7 @@ def load_book() -> dict:
 def save_book(data: dict) -> None:
     """Saves the dict to json file and closes it"""
     with open('data_phonebook.json', 'w') as data_ph:
-        json.dump(data, data_ph)
+        json.dump(data, data_ph, indent=4)
 
 
 def read_book(data: dict) -> str:
