@@ -1,7 +1,7 @@
 import json
 
 
-SEARCH_OPTIONS = ['number', 'first name', 'last name', 'full name', 'city']
+SEARCH_OPTIONS = ['number', 'first_name', 'last_name', 'full_name', 'city']
 JSON_NAME = 'contacts'
 
 
@@ -22,7 +22,7 @@ def read_book(data: dict) -> str:
     return json.dumps(data, indent=4)
 
 
-def add_entry(data: dict):
+def add_entry(data: dict) -> dict:
     """Return the phonebook with a new entry added"""
     check = False
     while not check:
@@ -68,6 +68,7 @@ def validate_duplicate(data: dict, number: str) -> bool:
     else:
         return True
 
+
 def search(data: dict) -> list:
     """Returns the list containing the search result"""
     print('Availiable search options are: ')
@@ -77,29 +78,18 @@ def search(data: dict) -> list:
         print('Such search option is availiable. Try again')
     
     query = input('Enter your query: ').lower()
-    contacts = []
 
-    if search_option == 'number':
-        contacts = [contact for contact in data.get(JSON_NAME) if contact.get('number') == query]
-
-    elif search_option == 'first name':
-        contacts = [contact for contact in data.get(JSON_NAME) if contact.get('first_name').lower() == query]
-        print(contacts)
-
-    elif search_option == 'last name':
-        contacts = [contact for contact in data.get(JSON_NAME) if contact.get('last_name').lower() == query]
-
-    elif search_option == 'city':
-        contacts = [contact for contact in data.get(JSON_NAME) if contact.get('city').lower() == query]
-
-    elif search_option == 'full name':
+    entries = []
+    if search_option == 'full name':
         f_name, l_name = query.split()
-        contacts = [contact for contact in data.get(JSON_NAME) if contact.get('first_name').lower() == f_name and contact.get('last_name').lower() == l_name]
+        entries = [entrie for entrie in data.get(JSON_NAME) if entrie.get('first_name').lower() == f_name and entrie.get('last_name').lower() == l_name]
+    else:
+        entries = [entrie for entrie in data.get(JSON_NAME) if entrie.get(search_option).lower() == query]
 
-    if len(contacts) < 1:
+    if len(entries) < 1:
         return None
     else:
-        return json.dumps(contacts, indent=4)
+        return json.dumps(entries, indent=4)
 
 
 def delete_contact(data: dict) -> dict:
@@ -124,7 +114,7 @@ def delete_contact(data: dict) -> dict:
     return json.dumps(removed, indent=4)
 
 
-def update(data: dict) -> int:
+def update(data: dict) -> None:
     """Updates the contact"""
     validate = False
     while not validate:
@@ -134,7 +124,7 @@ def update(data: dict) -> int:
     contact = [contact for contact in data.get(JSON_NAME) if contact.get('number') == number][0]
     if len(contact) < 1:
         print('\Contact not found! Try using "read" to check the contact with such number exists')
-        return 1
+        return
     else:
         print('\nContact found!\n')
         print(json.dumps(contact, indent=4))
@@ -167,4 +157,3 @@ def update(data: dict) -> int:
         city = input('Enter new city here: ')
         contact[field] = city
     
-    return 0
