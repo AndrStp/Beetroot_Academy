@@ -5,7 +5,6 @@
 
 def choose_func(nums: list, func1, func2) -> int:
     nums_positive = all([num for num in nums if num > 0])
-    nums_negative = all([num for num in nums if num < 0])
     if nums_positive:
         return func1(nums)
     else:
