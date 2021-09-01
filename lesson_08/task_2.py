@@ -1,26 +1,13 @@
-# Write a function that takes in two numbers from the user via input(), call the numbers a and b, and then 
-# returns the value of squared a divided by b, construct a try-except block which raises an exception 
-# if the two values given by the input function were not numbers, and if value b was zero (cannot divide by zero).
+# Creating a dictionary.
 
+# Create a function called make_country, which takes in a country’s name and capital as parameters. 
+# Then create a dictionary from those two, with ‘name’ as a key and ‘capital’ as a parameter. 
+# Make the function print out the values of the dictionary to make sure that it works as intended.
 
-def square() -> float:
-    """Returns the value of squared a divided by b"""
-    while True:
-        try:
-            a = float(input('Enter the first number: '))
-            b = float(input('Enter the second number: '))
-            return f'The result is {a**2 / b}'
+def make_country(name: str, capital: str) -> dict:
+    """Returns the dictionary (country) with name and capital as keys"""
+    country = {}
+    country.update({'name': name, 'capital': capital})
+    return country
 
-        except ValueError:
-            print('The inputs should be digits only!')
-
-        except ZeroDivisionError:
-            print('The second number should be greater than 0!')
-        
-        except KeyboardInterrupt:
-            print('\nBye!')
-            quit()
-
-
-result = square()
-print(result)
+print(make_country('France', 'Paris'))

@@ -1,7 +1,10 @@
-# List comprehension exercise
+# Extracting numbers.
 
-# Use a list comprehension to make a list containing tuples (i, j) where `i` goes from 1 to 10 and `j` is corresponding to `i` squared.
+# Make a list that contains all integers from 1 to 100, then find all integers from the list that are divisible by 7 but not a multiple of 5, and store them in a separate list. Finally, print the list.
+# Constraint: use only while loop for iteration
 
-list_1 = [(i, i**2) for i in range(1, 11)]
+numbers = list(range(1, 101))
 
-print(list_1)
+integers = [x for x in numbers if x % 7 == 0 and x % 5]
+
+print(integers)

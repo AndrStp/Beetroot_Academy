@@ -1,38 +1,91 @@
-# Create your own implementation of an iterable, which could be used inside for-in loop. 
-# Also, add logic for retrieving elements using square brackets syntax.
+# Write a class TypeDecorators which has several methods for converting results of functions to a specified type 
+# (if it's possible):
+
+# methods:
+# to_int
+# to_str
+# to_bool
+# to_float
+
+# Don't forget to use @wraps
+# ```
+# class TypeDecorators:
+#     pass
+
+# @TypeDecorators.to_int
+# def do_nothing(string: str):
+#     return string
+
+# @TypeDecorators.to_bool
+# def do_something(string: str):
+#     return string
+
+# assert do_nothing('25') == 25
+# assert do_something('True') is True
+# ```
 
 
-class MyIterable:
-    def __init__(self, some_sequence) -> None:
-        self.iterable = some_sequence
-        
-    def __getitem__(self, index):
-        print(f'{self.__getitem__.__name__} is called with index: {index}')
-        return self.iterable[index]
+class TypeDecorators:
+    """Converts results of given functions to a specified type
+    if possible. Otherwise raises ValueError"""
+
+    def to_int(self):
+        """Convert the result of a function to int"""
+        def wrapper(*args, **kwargs):
+            try:
+                return int(self(*args, **kwargs))
+            except ValueError as v_e:
+                return f'{v_e} occured'
+            except TypeError as t_e:
+                return f'{t_e} occured'
+        return wrapper
+
+    def to_str(self):
+        """Convert the result of a function to int"""
+        def wrapper(*args, **kwargs):
+            try:
+                return str(self(*args, **kwargs))
+            except ValueError as v_e:
+                return f'{v_e} occured'
+            except TypeError as t_e:
+                return f'{t_e} occured'
+        return wrapper
+
+    def to_bool(self):
+        """Convert the result of a function to int"""
+        def wrapper(*args, **kwargs):
+            try:
+                return bool(self(*args, **kwargs))
+            except ValueError as v_e:
+                return f'{v_e} occured'
+            except TypeError as t_e:
+                return f'{t_e} occured'
+        return wrapper
+
+    def to_float(self):
+        """Convert the result of a function to int"""
+        def wrapper(*args, **kwargs):
+            try:
+                return float(self(*args, **kwargs))
+            except ValueError as v_e:
+                return f'{v_e} occured'
+            except TypeError as t_e:
+                return f'{t_e} occured'
+        return wrapper
+            
+
+@TypeDecorators.to_int
+def do_nothing(string: str):
+    return string
+
+@TypeDecorators.to_bool
+def do_something(string: str):
+    return string
 
 
-l = MyIterable([1, 2, 3, 4])
+if __name__ == '__main__':
+    print(do_nothing('10'))  # -> 10
+    print(do_something([]))  # False
 
-print(l[0]) # -> 1
-print(l[:2]) # -> [1, 2]
-
-for i in l:
-    print(i)
-
-#==================================================================================
-
-def squares():
-    i = 1
-    while True:
-        yield i**2
-        i += 1
-
-sq_generator = squares()
-
-for i in range(0, 50):
-    if i % 5 == 0:
-        print()
-    print(str(next(sq_generator)).rjust(5), end=' ')
-
-
-
+    assert do_nothing('25') == 25
+    assert do_something('True') is True

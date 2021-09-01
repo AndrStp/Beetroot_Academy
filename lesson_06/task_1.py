@@ -1,21 +1,23 @@
-# Make a program that has some sentence (a string) on input and returns a dict 
-# containing all unique words as keys and the number of occurrences as values. 
+# The greatest number
 
-# For testing:
-# 'Hello, my name is Andrey. Andrey is from Odessa. Andrey currently studies python language at Beetroot Academy in Python for Begginers course. Beetroot Academy is a great place to learn python!'
+# Write a Python program to get the largest number from a list of random numbers with the length of 10
+# Constraints: use only while loop and random module to generate numbers
 
-import string
+from random import randint
 
 
-raw_text = input('Enter your text here: ')
+numbers = [randint(1, 1000) for _ in range(10)]
 
-# get rid of punctuation in a raw_string
-processed_text = raw_text.translate(str.maketrans('', '', string.punctuation))
+biggest = max(numbers)
 
-# count words in a dict
-words = {}
-for word in processed_text.split():
-    word = word.lower()
-    words[word] = words.get(word, 0) + 1
+# without using max()
+biggest_ = None
+for number in numbers:
+    if biggest_ is None:
+        biggest_ = number
+    elif biggest_ < number:
+        biggest_ = number
+        
 
-print(words)
+print('Using max() ->', biggest)
+print('Without max() ->', biggest_)

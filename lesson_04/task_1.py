@@ -1,31 +1,12 @@
-# The Guessing Game.
+string_ = input('Provide a string here: ')
 
-from random import randint
-
-
-def game():
-    number = randint(1, 10)
-    print('The game is to guess the number range from [1 to 10]')
-
-    i = 1
-    flag = True
-    while flag:
-        guess = input('Enter your number: ')
-        try:
-            guess = int(guess)
-        except ValueError:
-            print('You should enter numbers only!')
-            continue
-        
-        if guess > number:
-            print('Your guess is bigger than the number')
-        elif guess < number:
-            print('Your guess is smaller than the number')
-        else:
-            print(f'You guessed the number: {number}. It took you {i} guesses')
-            return
-
-        i += 1
+def slice_string(strng: str) -> str:
+    """Return first and last two chars in the word.
+    If the word consists of less than 2 chars return empty string"""
+    if len(strng) < 2:
+        return ''
+    else:
+        return strng[:2] + strng[-2:]
 
 
-game()
+print(slice_string(string_))

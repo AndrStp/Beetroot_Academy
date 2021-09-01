@@ -49,8 +49,10 @@ def arg_rules(max_length: int, type_: str, contains: list):
 @arg_rules(type_=str, max_length=15, contains=['05', '@'])
 def create_slogan(name: str) -> str:
     return f"{name} drinks pepsi in his brand new BMW!"
- 
-assert create_slogan('johndoe05@gmail.com') is False # -> Exceeded max_length constraint
-assert create_slogan(123761278367812736871286) is False # -> Is not a string
-assert create_slogan('john@gmail.com') is False # -> Does not contain required elements
-assert create_slogan('S@SH05') == 'S@SH05 drinks pepsi in his brand new BMW!'
+
+    
+if __name__ == '__main__':
+    assert create_slogan('johndoe05@gmail.com') is False # -> Exceeded max_length constraint
+    assert create_slogan(123761278367812736871286) is False # -> Is not a string
+    assert create_slogan('john@gmail.com') is False # -> Does not contain required elements
+    assert create_slogan('S@SH05') == 'S@SH05 drinks pepsi in his brand new BMW!'

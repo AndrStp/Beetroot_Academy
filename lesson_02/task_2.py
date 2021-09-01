@@ -1,6 +1,5 @@
-f_name = 'Jamie'
-s_name = 'Strong'
+# prints 5, 4, 3, 2, 1 separate on each line
+print(5, 4, 3, 2, 1, sep='\n')
 
-full_name = f_name + ' ' + s_name
-
-print('Good morning,', full_name)
+# prints 'Andrew' with 5 exclamation marks and new-line char at the end
+print('Andrew', end='!!!!!\n')

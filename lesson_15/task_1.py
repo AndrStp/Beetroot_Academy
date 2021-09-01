@@ -1,34 +1,38 @@
-# Create a class method named `validate`, which should be called from the `__init__` method to validate parameter email, 
-# passed to the constructor. The logic inside the `validate` method could be to check if the passed email parameter is a valid email string.
+# Write a decorator that prints a function with arguments passed to it.
+# NOTE! It should print the function, not the result of its execution!
 
-# Email validations:
-# https://help.xmatters.com/ondemand/trial/valid_email_format.htm 
-# https://en.wikipedia.org/wiki/Email_address 
+# For example:
+#  "add called with 4, 5"
+
+# ```
+# def logger(func):
+#     pass
+
+# @logger
+# def add(x, y):
+#     return x + y
+
+# @logger
+# def square_all(*args):
+#     return [arg ** 2 for arg in args]
+# ```
 
 
-class EmailValidator:
-    def __init__(self, email) -> None:
-        if EmailValidator.validate(email):
-            self.email = email
-        else:
-            raise ValueError('E-mail name is not valid!')
+def logger(func):
+    def wrapper(*args):
+        print(f'{func.__name__} called with ', end='')
+        print(*args, sep=', ')
+        func(*args)
+    return wrapper
 
-    @staticmethod
-    def validate(email):
-        if '@' not in email:
-            return False
-        elif email.startswith('@') or email.endswith('@'):
-            return False
-        elif email.count('@') > 1:
-            return False
-        elif email.startswith('.') or email.endswith('.'):
-            return False
-        
-        at_index = email.index('@')
-        prefix = email[:at_index]
-        domain = email[at_index+1:]
+@logger
+def add(x, y):
+    return x + y
 
-        if '.' not in domain:
-            return False
+@logger
+def square_all(*args):
+    return [arg ** 2 for arg in args]
 
-        
+
+add(3, 4)
+square_all(3, 4, 5)

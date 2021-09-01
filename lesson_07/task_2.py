@@ -1,13 +1,16 @@
-# Creating a dictionary.
+# Create a function which takes as input two dicts with structure mentioned below,
+# then computes and returns the total price of stock.
 
-# Create a function called make_country, which takes in a country’s name and capital as parameters. 
-# Then create a dictionary from those two, with ‘name’ as a key and ‘capital’ as a parameter. 
-# Make the function print out the values of the dictionary to make sure that it works as intended.
+stock = {"banana": 6, "apple": 0, "orange": 32, "pear": 15}
+prices = {"banana": 4, "apple": 2, "orange": 1.5, "pear": 3}
 
-def make_country(name: str, capital: str) -> dict:
-    """Returns the dictionary (country) with name and capital as keys"""
-    country = {}
-    country.update({'name': name, 'capital': capital})
-    return country
 
-print(make_country('France', 'Paris'))
+def calculate_price(stock_: dict, prices_: dict) -> float:
+    """Return the total price of the stock"""
+    total_price = 0
+    for value_stock, value_price in zip(stock_.values(), prices_.values()):
+        total_price += value_stock * value_price
+    return round(total_price, 2)
+
+total = calculate_price(stock, prices)
+print(f'The total price of the stock is ${total:.2f}')

@@ -1,35 +1,27 @@
-# Write a decorator that takes a list of stop words and replaces them with * inside the decorated function
-
-# ```
-# def stop_words(words: list):
-#     pass
-
-# @stop_words(['pepsi', 'BMW'])
-# def create_slogan(name: str) -> str:
-#     return f"{name} drinks pepsi in his brand new BMW!"
- 
-# assert create_slogan("Steve") == "Steve drinks * in his brand new *!"
-# ```
+# Write a Python program to access a function inside a function 
+# (Tips: use function, which returns another function)
 
 
-def stop_words(words: list):
-    def stop_words_decorator(func):
-        def wrapper(arg):
-            result: str = func(arg)
+def func(func_name: str):
 
-            for word in words:
-                if word in result:
-                    modified_result = result.replace(word, '*')
-            
-            return modified_result
-        
-        return wrapper
+    def func_1():
+        print("I'm func_1")
+
+    def func_2():
+        print("I'm func_1")
+
+    def func_3():
+        print("I'm func_1")
     
-    return stop_words_decorator
+    all_func = {
+        'func_1': func_1,
+        'func_2': func_2,
+        'func_3': func_3
+    }
+
+    return all_func.get(func_name, 'no such func')
 
 
-@stop_words(['pepsi', 'BMW'])
-def create_slogan(name: str) -> str:
-    return f"{name} drinks pepsi in his brand new BMW!"
- 
-assert create_slogan("Steve") == "Steve drinks * in his brand new *!"
+func_1 = func('func_1')
+func_1() # -> I'm func_1
+

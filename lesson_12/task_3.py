@@ -1,114 +1,118 @@
-# Fraction
+# Product Store
 
-# Create a Fraction class, which will represent all basic arithmetic logic for fractions (+, -, /, *) 
-# with appropriate checking and error handling
+# Write a class Product that has three attributes:
+# * type
+# * name
+# * price
 
-from __future__ import annotations
-from math import gcd
+# Then create a class ProductStore, which will have some Products and will operate with all products in the store. 
+# All methods, in case they can’t perform its action, should raise ValueError with appropriate error information.
+
+# Tips: Use aggregation/composition concepts while implementing the ProductStore class. 
+# You can also implement additional classes to operate on a certain type of product, etc.
+
+# Also, the ProductStore class must have the following methods:
+
+# * add(product, amount) - adds a specified quantity of a single product with a predefined price premium for your store(30 percent)
+# * set_discount(identifier, percent, identifier_type=’name’) - adds a discount for all products specified by input identifiers (type or name). 
+# The discount must be specified in percentage
+# * sell_product(product_name, amount) - removes a particular amount of products from the store if available, in other case raises an error. 
+# It also increments income if the sell_product method succeeds.
+# * get_income() - returns amount of many earned by ProductStore instance.
+# * get_all_products() - returns information about all available products in the store.
+# * get_product_info(product_name) - returns a tuple with product name and amount of items in the store.
 
 
-class Fraction:
-    """Represents a class for positive only integer-composed-fractions
-    So fractions like '-(1/2)' or '0.2/1.5' will cause an error"""
+class Product:
 
-    def __init__(self, numerator, denominator) -> None:
-        if not isinstance(numerator, int):
-            raise TypeError('The numerator should be an integer')
-        elif numerator < 1:
-            raise ValueError('The numerator should be a positive integer bigger than 0')
-
-        if not isinstance(denominator, int):
-            raise TypeError('The denominator should be an integer')
-        elif denominator < 1:
-            raise ValueError('The denominator should be a positive integer bigger than 0')
-
-        self.numerator = numerator
-        self.denominator = denominator
+    def __init__(self, type_: str, name: str, price: float) -> None:
+        self.type_ = type_
+        self.name = name
+        self.price = price
     
     def __repr__(self) -> str:
-        return f'({self.numerator} / {self.denominator})'
+        return self.name
 
-    def __str__(self) -> str:
-        return f'({self.numerator} / {self.denominator})'
+    def info(self) -> str:
+        """Returns info by listing object atributes"""
+        return f'Name: {self.name}, type: {self.type_}, price: {self.price}'
     
-    @staticmethod
-    def is_fraction(object) -> bool:
-        """Returns True if object is an object of Fraction class
-        False - otherwise"""
-        if isinstance(object, Fraction):
-            return True
+
+class ProductsStore:
+
+    def __init__(self) -> None:
+        self.shelf = {}
+        self.income: float = 0
+
+    def add(self, other: object, amount: int) -> None:
+        """Adds a specified quantity of a single product with a predefined price premium for your store(30 percent)"""
+        other.price = other.price + other.price * 0.3
+        self.shelf.update({other: amount})
+        print(f'{amount} {other.name}-s have been added to the Store')
+
+    def set_discount(self, identifier: str, percent: int, identifier_type='name'):
+        """Sets a discount on the particular product or type of products"""
+        if identifier_type == 'type':
+            for product in self.shelf.keys():
+                if product.type_ == identifier:
+                    product.price = product.price - product.price * (percent / 100)
         else:
-            return False
-    
-    @staticmethod
-    def get_least_common_denom(denom_1: int, denom_2: int) -> int:
-        """Returns common denominator for denom_1 and denom_2"""
-        return int(denom_1 * denom_2 / gcd(denom_1, denom_2))
+            product = [product_ for product_ in list(self.shelf.keys()) if product_.name == identifier][0]
+            product.price = product.price - product.price * (percent / 100)
 
-    @staticmethod
-    def simplify_fraction(fraction: Fraction) -> Fraction:
-        """Return the fraction by dividing both numerator and denominator by a gcd. 
-        Returns the same fraction if the gcd equals 1"""
-        common_gcd = gcd(fraction.numerator, fraction.denominator)
-        if common_gcd == 1:
-            return fraction
+    def sell_product(self, product_name: object, amount: int) -> None:
+        """Removes a particular amount of products from the store if available, in other case raises an error.
+        It also increments income if the sell_product method succeeds."""
+        if amount > self.shelf.get(product_name):
+            print(f'Not enough {product_name} in the store')
         else:
-            return Fraction(int(fraction.numerator / common_gcd), int(fraction.denominator / common_gcd))
+            self.shelf[product_name] -= amount
+            self.income += product_name.price * amount
+            print(f'Operation successfull: {amount} {product_name} for {round(product_name.price * amount, 2)}')
+
+    def get_income(self) -> str:
+        """Returns amount of many earned by ProductStore instance."""
+        return f'The income is {round(self.income, 2)}'
+
+    def get_all_products(self) -> list:
+        """Returns information about all available products in the store."""
+        available_products = [product.name for product in self.shelf.keys() if self.shelf.get(product) > 0]
+        return available_products
+
+    def get_product_info(self, product_name: object) -> tuple:
+        """Returns a tuple with product name and amount of items in the store."""
+        product_amount = self.shelf.get(product_name)
+        return product_name, product_amount
 
 
-    def __gt__(self, other: Fraction) -> bool:
-        """Returns True if the fraction is bigger than the other fraction
-        False - otherwise"""
-        if not Fraction.is_fraction(other):
-            raise TypeError (f'Cannot compare {__class__.__name__} with {type(other)}')
-
-        if self.denominator == other.denominator:
-            return self.numerator > other.numerator
-
-        self_numerator = self.numerator * (Fraction.get_least_common_denom(self.denominator, other.denominator) / self.denominator)
-        other_numerator = other.numerator * (Fraction.get_least_common_denom(self.denominator, other.denominator) / other.denominator)
-        return self_numerator > other_numerator
-
-    def __add__(self, other: Fraction) -> Fraction:
-        """Return the Fraction by adding other Fraction to it"""
-        if not Fraction.is_fraction(other):
-            raise TypeError (f'Cannot add {type(other)} with {__class__.__name__}')
-
-        denominator = Fraction.get_least_common_denom(self.denominator, other.denominator)
-        numerator = int(
-            self.numerator * (denominator / self.denominator)
-            + other.numerator * (denominator / other.denominator)   
-        )
-        return Fraction.simplify_fraction(Fraction(numerator, denominator))
-
-    def __sub__(self, other: Fraction) -> Fraction:
-        """Return the Fraction by adding other Fraction to it"""
-        if not Fraction.is_fraction(other):
-            raise TypeError (f'Cannot substract {type(other)} from {__class__.__name__}')
-
-        if other > self:
-            raise ValueError (f'The {other} cannot be greater than {self}')
-
-        denominator = Fraction.get_least_common_denom(self.denominator, other.denominator)
-        numerator = int(
-            self.numerator * (denominator / self.denominator)
-            - other.numerator * (denominator / other.denominator)   
-        )
-        return Fraction.simplify_fraction(Fraction(numerator, denominator))
+if __name__ == '__main__':
     
-    def __mul__(self, other: Fraction) -> Fraction:
-        """Return the Fraction by multiplying it by other Fraction"""
-        if not Fraction.is_fraction(other):
-            raise TypeError (f'Cannot substract {type(other)} from {__class__.__name__}')
+    # Products
+    potato = Product('vegetable', 'potato', 10)
+    tomato = Product('vegetable', 'tomato', 30)
+    onion = Product('vegetable', 'onion', 30)
 
-        numerator = self.numerator * other.numerator
-        denominator = self.denominator * other.denominator
-        return Fraction.simplify_fraction(Fraction(numerator, denominator))
+    strawberry = Product('berry', 'strawberry', 50)
+    blackberry = Product('berry', 'blackberry', 70)
+    blueberry = Product('berry', 'blueberry', 80)
 
-    def __truediv__(self, other: Fraction) -> Fraction:
-        """Return the Fraction by diving it by other Fraction"""
-        if not Fraction.is_fraction(other):
-            raise TypeError (f'Cannot substract {type(other)} from {__class__.__name__}')
-        
-        temp_other = Fraction(other.denominator, other.numerator)
-        return self.__mul__(temp_other)
+    apple = Product('fruit', 'apple', 15)
+    peach = Product('fruit', 'peach', 30)
+    pear = Product('fruit', 'pear', 15)
+
+    # Store
+    store = ProductsStore() # initialize store
+    store.add(potato, 20) # -> 20 potato-s have been added to the Store
+    store.add(onion, 10) # -> 10 onion-s have been added to the Store
+    store.add(apple, 20) # -> 20 apple-s have been added to the Store
+    print(store.get_all_products()) # -> ['potato', 'onion', 'apple']
+    print(store.get_income()) # -> 'The income is 0'
+    store.sell_product(potato, 10) # -> Operation successfull: 10 potato for 130.0
+    store.set_discount('potato', 50)
+    store.sell_product(potato, 10) # -> Operation successfull: 10 potato for 65.0
+    print(store.get_income()) # -> The income is 195.0
+    print(store.get_product_info(potato)) # -> (potato, 0)
+    store.sell_product(apple, 10) # -> Operation successfull: 10 apple for 195.0
+    store.set_discount('fruit', 40, 'type')
+    store.sell_product(apple, 10) # -> Operation successfull: 10 apple for 117.0
+    print(store.get_income()) # -> The income is 507.0

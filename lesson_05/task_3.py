@@ -1,10 +1,10 @@
-# Extracting numbers.
+# Words combination
 
-# Make a list that contains all integers from 1 to 100, then find all integers from the list that are divisible by 7 but not a multiple of 5, and store them in a separate list. Finally, print the list.
-# Constraint: use only while loop for iteration
+from random import shuffle
 
-numbers = list(range(1, 101))
 
-integers = [x for x in numbers if x % 7 == 0 and x % 5]
+word = list(input('Enter a word: '))
 
-print(integers)
+for _ in range(5):
+    shuffle(word)
+    print(''.join(word))

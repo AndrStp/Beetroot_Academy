@@ -1,16 +1,18 @@
-# Create a function which takes as input two dicts with structure mentioned below,
-# then computes and returns the total price of stock.
+# Exclusive common numbers.
 
-stock = {"banana": 6, "apple": 0, "orange": 32, "pear": 15}
-prices = {"banana": 4, "apple": 2, "orange": 1.5, "pear": 3}
+# Generate 2 lists with the length of 10 with random integers from 1 to 10, and make a third list containing the common integers between the 2 initial lists without any duplicates.
+# Constraints: use only while loop and random module to generate numbers
+
+from random import randint
 
 
-def calculate_price(stock_: dict, prices_: dict) -> float:
-    """Return the total price of the stock"""
-    total_price = 0
-    for value_stock, value_price in zip(stock_.values(), prices_.values()):
-        total_price += value_stock * value_price
-    return round(total_price, 2)
+list_1 = [randint(1, 10) for _ in range(10)]
+list_2 = [randint(1, 10) for _ in range(10)]
 
-total = calculate_price(stock, prices)
-print(f'The total price of the stock is ${total:.2f}')
+list_3 = list(set(list_1) & set(list_2))
+
+if list_3:
+    print('Common items between two lists are: ', end = '')
+    print(*list_3, sep=', ')
+else:
+    print('There are no common elemetns between two lists')

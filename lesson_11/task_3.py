@@ -1,118 +1,150 @@
-# Product Store
+# TV controller
 
-# Write a class Product that has three attributes:
-# * type
-# * name
-# * price
+# Create a simple prototype of a TV controller in Python. It’ll use the following commands:
 
-# Then create a class ProductStore, which will have some Products and will operate with all products in the store. 
-# All methods, in case they can’t perform its action, should raise ValueError with appropriate error information.
+# - first_channel() - turns on the first channel from the list.
+# - last_channel() - turns on the last channel from the list.
+# - turn_channel(N) - turns on the N channel. Pay attention that the channel numbers start from 1, not from 0.
+# - next_channel() - turns on the next channel. If the current channel is the last one, turns on the first channel.
+# - previous_channel() - turns on the previous channel. If the current channel is the first one, turns on the last channel.
+# - current_channel() - returns the name of the current channel.
+# - is_exist(N/'name') - gets 1 argument - the number N or the string 'name' and returns "Yes", 
+# if the channel N or 'name' exists in the list, or "No" - in the other case.
 
-# Tips: Use aggregation/composition concepts while implementing the ProductStore class. 
-# You can also implement additional classes to operate on a certain type of product, etc.
-
-# Also, the ProductStore class must have the following methods:
-
-# * add(product, amount) - adds a specified quantity of a single product with a predefined price premium for your store(30 percent)
-# * set_discount(identifier, percent, identifier_type=’name’) - adds a discount for all products specified by input identifiers (type or name). 
-# The discount must be specified in percentage
-# * sell_product(product_name, amount) - removes a particular amount of products from the store if available, in other case raises an error. 
-# It also increments income if the sell_product method succeeds.
-# * get_income() - returns amount of many earned by ProductStore instance.
-# * get_all_products() - returns information about all available products in the store.
-# * get_product_info(product_name) - returns a tuple with product name and amount of items in the store.
+from itertools import cycle, islice
 
 
-class Product:
+class TV_Controller:
+    """TV Controller"""
 
-    def __init__(self, type_: str, name: str, price: float) -> None:
-        self.type_ = type_
-        self.name = name
-        self.price = price
+    def __init__(self, channels: list) -> None:
+        self.channels = channels
+        self.current = self.channels[0]
+
+    def play(self) -> None:
+        """Controls the TV"""
+        print('TV Remote controller interface')
+        print("""
+        - first_channel - turns on the first channel from the list.
+        - last_channel - turns on the last channel from the list.
+        - turn_channel - turns on the N channel. Pay attention that the channel numbers start from 1, not from 0.
+        - next_channel - turns on the next channel. If the current channel is the last one, turns on the first channel.
+        - previous_channel - turns on the previous channel. If the current channel is the first one, turns on the last channel.
+        - current_channel - returns the name of the current channel.
+        - is_exist - returns "Yes" if the channel N or 'name' exists in the list, or "No" - in the other case.
+        - off - swith off the TV and exit the program.
+        """)
+
+        while True:
+            _commands = ['first_channel', 'last_channel', 'turn_channel', 'next_channel', 'previous_channel', 'current_channel', 'is_exist', 'off']
+            command = input('Enter you command: ')
+            while command not in _commands: 
+                print(f'No such command "{command}", try again\n')
+                command = input('Enter you command: ') 
+
+            if command == 'off':
+                print('Switching off the TV...')
+                quit()
+                
+            method_to_call = getattr(self, command)
+            if command == 'is_exist':
+                user_channel = input('Enter the channel name or number here: ')
+                result = method_to_call(user_channel)
+            elif command == 'turn_channel':
+                user_channel = int(input('Enter the channel number here: '))
+                result = method_to_call(user_channel)
+            else:
+                result = method_to_call()
+            
+            print(result)
+            print()
     
-    def __repr__(self) -> str:
-        return self.name
-
-    def info(self) -> str:
-        """Returns info by listing object atributes"""
-        return f'Name: {self.name}, type: {self.type_}, price: {self.price}'
+    def first_channel(self) -> str:
+        self.current = self.channels[0]
+        return self.current
     
-
-class ProductsStore:
-
-    def __init__(self) -> None:
-        self.shelf = {}
-        self.income: float = 0
-
-    def add(self, other: object, amount: int) -> None:
-        """Adds a specified quantity of a single product with a predefined price premium for your store(30 percent)"""
-        other.price = other.price + other.price * 0.3
-        self.shelf.update({other: amount})
-        print(f'{amount} {other.name}-s have been added to the Store')
-
-    def set_discount(self, identifier: str, percent: int, identifier_type='name'):
-        """Sets a discount on the particular product or type of products"""
-        if identifier_type == 'type':
-            for product in self.shelf.keys():
-                if product.type_ == identifier:
-                    product.price = product.price - product.price * (percent / 100)
+    def last_channel(self) -> str:
+        self.current = self.channels[-1]
+        return self.current
+    
+    def turn_channel(self, channel: int) -> str:
+        if self.is_exist(channel) == 'Yes':
+            self.current = self.channels[channel]
+            return self.current
         else:
-            product = [product_ for product_ in list(self.shelf.keys()) if product_.name == identifier][0]
-            product.price = product.price - product.price * (percent / 100)
+            return f'No such channel'
 
-    def sell_product(self, product_name: object, amount: int) -> None:
-        """Removes a particular amount of products from the store if available, in other case raises an error.
-        It also increments income if the sell_product method succeeds."""
-        if amount > self.shelf.get(product_name):
-            print(f'Not enough {product_name} in the store')
-        else:
-            self.shelf[product_name] -= amount
-            self.income += product_name.price * amount
-            print(f'Operation successfull: {amount} {product_name} for {round(product_name.price * amount, 2)}')
+    def next_channel(self) -> str:
+        ### solve using itertools cycle and islice ###
+        # channels = cycle(self.channels)
+        # start = islice(channels, self.channels.index(self.current) + 1, None)
+        # self.current = next(start)
 
-    def get_income(self) -> str:
-        """Returns amount of many earned by ProductStore instance."""
-        return f'The income is {round(self.income, 2)}'
+        ### solve using iter() ###
+        # channels = iter(self.channels[self.channels.index(self.current)+1:])
+        # try:
+        #     self.current = next(channels)
+        # except StopIteration:
+        #     channels = iter(self.channels)
+        #     self.current = next(channels)
 
-    def get_all_products(self) -> list:
-        """Returns information about all available products in the store."""
-        available_products = [product.name for product in self.shelf.keys() if self.shelf.get(product) > 0]
-        return available_products
+        ### solve using elif and list index ###
+        # next_channel_index = self.channels.index(self.current) + 1
+        # if next_channel_index > len(self.channels) - 1:
+        #     self.current = self.channels[0]
+        # else:
+        #     self.current = self.channels[next_channel_index]
 
-    def get_product_info(self, product_name: object) -> tuple:
-        """Returns a tuple with product name and amount of items in the store."""
-        product_amount = self.shelf.get(product_name)
-        return product_name, product_amount
+        ### solve using modulo operator (%) ###
+        current_channel_index = self.channels.index(self.current)
+        self.current = self.channels[(current_channel_index + 1) % len(self.channels)]
 
-
-if __name__ == '__main__':
+        return self.current
     
-    # Products
-    potato = Product('vegetable', 'potato', 10)
-    tomato = Product('vegetable', 'tomato', 30)
-    onion = Product('vegetable', 'onion', 30)
+    def previous_channel(self) -> str:
+        ### solve using itertools cycle and islice ###
+        # channels = cycle(reversed(self.channels))
+        # start = islice(channels, list(reversed(self.channels)).index(self.current) + 1, None)
+        # self.current = next(start)
 
-    strawberry = Product('berry', 'strawberry', 50)
-    blackberry = Product('berry', 'blackberry', 70)
-    blueberry = Product('berry', 'blueberry', 80)
+        ### solve using iter() ###
+        # channels = iter(reversed(self.channels[:self.channels.index(self.current)]))
+        # try:
+        #     self.current = next(channels)
+        # except StopIteration:
+        #     channels = iter(reversed(self.channels))
+        #     self.current = next(channels)
 
-    apple = Product('fruit', 'apple', 15)
-    peach = Product('fruit', 'peach', 30)
-    pear = Product('fruit', 'pear', 15)
+        ### solve using elif and list index ###
+        # prev_channel_index = self.channels.index(self.current) - 1
+        # if prev_channel_index < 0:
+        #     self.current = self.channels[-1]
+        # else:
+        #     self.current = self.channels[prev_channel_index]
 
-    # Store
-    store = ProductsStore() # initialize store
-    store.add(potato, 20) # -> 20 potato-s have been added to the Store
-    store.add(onion, 10) # -> 10 onion-s have been added to the Store
-    store.add(apple, 20) # -> 20 apple-s have been added to the Store
-    print(store.get_all_products()) # -> ['potato', 'onion', 'apple']
-    print(store.get_income()) # -> 'The income is 0'
-    store.sell_product(potato, 10) # -> Operation successfull: 10 potato for 130.0
-    store.set_discount('potato', 50)
-    store.sell_product(potato, 10) # -> Operation successfull: 10 potato for 65.0
-    print(store.get_income()) # -> The income is 195.0
-    print(store.get_product_info(potato)) # -> (potato, 0)
-    store.sell_product(apple, 10) # -> Operation successfull: 10 apple for 195.0
-    store.set_discount('fruit', 40, 'type')
-    store.sell_product(apple, 10) # -> Operation successfull: 10 apple for 117.0
-    print(store.get_income()) # -> The income is 507.0
+        ### solve using modulo operator (%) ###
+        current_channel_index = self.channels.index(self.current)
+        self.current = self.channels[(current_channel_index - 1) % len(self.channels)]
+
+        return self.current
+
+    def current_channel(self) -> str:
+        return self.current
+
+    def is_exist(self, channel: int or str) -> str:
+        if type(channel) == int:
+            try:
+                self.channels[channel-1]
+            except IndexError:
+                return 'No'
+            else:
+                return 'Yes'
+        else:
+            if channel in self.channels:
+                return 'Yes'
+
+
+CHANNELS = ["BBC", "Discovery", "TV1000"]
+
+tv = TV_Controller(CHANNELS)
+tv.play()

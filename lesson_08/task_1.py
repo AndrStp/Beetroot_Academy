@@ -1,20 +1,12 @@
-# Write a function called oops that explicitly raises an IndexError exception when called. 
-# Then write another function that calls oops inside a try/except state­ment to catch the error. 
-# What happens if you change oops to raise KeyError instead of IndexError?
+# A simple function.
 
+# Create a simple function called favorite_movie, which takes a string containing the name of your favorite movie. 
+# The function should then print “My favorite movie is named {name}”.
 
-def oops() -> None:
-    """Raises an exception"""
-    raise IndexError
-    # raise KeyError
+def simple_func(movie_name: str) -> str:
+    """Returns your favourite movie"""
+    return f'My favorite movie is named {movie_name}'
 
+name = input('Enter your favourite movie name: ')
 
-def another_oops() -> None:
-    """Calls oops()"""
-    try:
-        oops()
-    except Exception:  # так делать нельзя :)
-        print('Exception catched')
-
-
-another_oops()
+print(simple_func(name))
