@@ -11,9 +11,10 @@ https://docs.python.org/3.7/reference/compound_stmts.html#with
 """
 
 import logging
+from os import path
 
 
-logging.basicConfig(format='%(asctime)s - %(message)s', datefmt='%d %b %Y %H:%M:%S', level=logging.DEBUG)
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(message)s', datefmt='%d %b %Y %H:%M:%S')
 
 
 class FileManager:
@@ -24,9 +25,17 @@ class FileManager:
         return cls.counter
 
     def __init__(self, file_path, mode):
-        self.file_path = file_path
-        self.mode = mode
         logging.debug('Getting the parametres')
+
+        if not path.isfile(file_path):
+            raise FileNotFoundError (f'The file "{file_path}" does not exist')
+        
+        self.file_path = file_path
+
+        if mode not in ['r', 'w', 'x', 'a']:
+            raise ValueError (f'Unsupportable file-mode: "{mode}"')
+
+        self.mode = mode
         
     def __enter__(self):
         FileManager.counter += 1
