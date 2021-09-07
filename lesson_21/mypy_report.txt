@@ -1,33 +1,33 @@
 task_2.py:50: error: Item "None" of "Optional[Any]" has no attribute "append"
         return data.get(JSON_NAME).append(entry)
                ^
-task_2.py:73: error: Item "None" of "Optional[Any]" has no attribute "__iter__"
+task_2.py:72: error: Item "None" of "Optional[Any]" has no attribute "__iter__"
 (not iterable)
     ...k_numbers = [contact.get('number') for contact in data.get(JSON_NAME)]
                                                          ^
 task_2.py:94: error: Item "None" of "Optional[Any]" has no attribute "__iter__"
 (not iterable)
-            entries = [entrie for entrie in data.get(JSON_NAME) if entrie....
-                                            ^
-task_2.py:96: error: Item "None" of "Optional[Any]" has no attribute "__iter__"
-(not iterable)
-            entries = [entrie for entrie in data.get(JSON_NAME) if entrie....
-                                            ^
-task_2.py:111: error: Item "None" of "Optional[Any]" has no attribute
+                        in data.get(JSON_NAME) 
+                           ^
+task_2.py:100: error: Item "None" of "Optional[Any]" has no attribute
+"__iter__" (not iterable)
+                        in data.get(JSON_NAME) 
+                           ^
+task_2.py:115: error: Item "None" of "Optional[Any]" has no attribute
 "__iter__" (not iterable)
         contacts = [contact for contact in data.get(JSON_NAME) if contact....
                                            ^
-task_2.py:117: error: Item "None" of "Optional[Any]" has no attribute
+task_2.py:121: error: Item "None" of "Optional[Any]" has no attribute
 "__iter__" (not iterable)
             for contact in data.get(JSON_NAME):
                            ^
-task_2.py:119: error: Item "None" of "Optional[Any]" has no attribute "index"
+task_2.py:123: error: Item "None" of "Optional[Any]" has no attribute "index"
                     entry = data.get(JSON_NAME).index(contact)
                             ^
-task_2.py:121: error: Item "None" of "Optional[Any]" has no attribute "pop"
+task_2.py:125: error: Item "None" of "Optional[Any]" has no attribute "pop"
             removed = data.get(JSON_NAME).pop(entry)
                       ^
-task_2.py:133: error: Item "None" of "Optional[Any]" has no attribute
+task_2.py:137: error: Item "None" of "Optional[Any]" has no attribute
 "__iter__" (not iterable)
         contact = [contact for contact in data.get(JSON_NAME) if contact.g...
                                           ^

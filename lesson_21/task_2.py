@@ -7,7 +7,7 @@ perform refactoring based on the mentioned results.
 """
 
 import json
-from typing import Union
+from typing import Optional
 
 
 SEARCH_OPTIONS = ['number', 'first_name', 'last_name', 'full_name', 'city']
@@ -56,16 +56,15 @@ def validate_number(number: str) -> bool:
         print('The number should start with "+" sign')
         return False
 
-    elif (l:=len(number.lstrip('+'))) < 10:
-        print(f'The number should contain 10 digits. Yours contain {l} digits')
+    if (num:=len(number.lstrip('+'))) < 10:
+        print(f'The number should contain 10 digits. Yours contain {num} digits')
         return False
 
-    elif not number.lstrip('+').isdigit():
+    if not number.lstrip('+').isdigit():
         print('The number should contain digits only')
         return False
 
-    else:
-        return True
+    return True
 
 
 def validate_duplicate(data: dict, number: str) -> bool:
@@ -74,11 +73,10 @@ def validate_duplicate(data: dict, number: str) -> bool:
     if number in book_numbers:
         print(f'The contact with the number {number} already exists!')
         return False
-    else:
-        return True
+    return True
 
 
-def search(data: dict) -> Union[str, None]:
+def search(data: dict) -> Optional[str]:
     """Returns the list containing the search result"""
     print('Availiable search options are: ')
     print(*SEARCH_OPTIONS, sep='\n')
@@ -91,14 +89,20 @@ def search(data: dict) -> Union[str, None]:
     entries = []
     if search_option == 'full name':
         f_name, l_name = query.split()
-        entries = [entrie for entrie in data.get(JSON_NAME) if entrie.get('first_name').lower() == f_name and entrie.get('last_name').lower() == l_name]
+        entries = [entrie 
+                    for entrie 
+                    in data.get(JSON_NAME) 
+                    if entrie.get('first_name').lower() == f_name 
+                    and entrie.get('last_name').lower() == l_name]
     else:
-        entries = [entrie for entrie in data.get(JSON_NAME) if entrie.get(search_option).lower() == query]
+        entries = [entrie 
+                    for entrie 
+                    in data.get(JSON_NAME) 
+                    if entrie.get(search_option).lower() == query]
 
     if len(entries) < 1:
         return None
-    else:
-        return json.dumps(entries, indent=4)
+    return json.dumps(entries, indent=4)
 
 
 def delete_contact(data: dict) -> str:
@@ -132,7 +136,7 @@ def update(data: dict) -> None:
     
     contact = [contact for contact in data.get(JSON_NAME) if contact.get('number') == number][0]
     if len(contact) < 1:
-        print('\Contact not found! Try using "read" to check the contact with such number exists')
+        print('Contact not found! Try using "read" to check the contact with such number exists')
         return None
     else:
         print('\nContact found!\n')
